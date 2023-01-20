@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  postgres-compose:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: ${DATABASE_LOGIN}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - "15432:5432"
+    networks:
+      - postgres-network
+      
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_MAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres-compose
+    networks:
+      - postgres-network
+
+networks: 
+  postgres-network:
+    driver: bridge
