@@ -28,9 +28,8 @@ audio = Table(
     Column('selected_tick', Integer, nullable=False),
     Column('ticks', ARRAY(Numeric), nullable=False),
     Column('created_at', DateTime, nullable=True),
-    Column('updated_at',DateTime, nullable=True),
-    Column('created_at', DateTime, nullable=True),
     Column('updated_at',DateTime, nullable=True)
 )
 
+meta.drop_all(engine)
 meta.create_all(engine)

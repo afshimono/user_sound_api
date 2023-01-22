@@ -1,13 +1,13 @@
 import datetime as dt
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, EmailStr, HttpUrl,parse_obj_as, validator
 
 from user_sound.core.models import UserModel, AudioModel
 
 class Metadata(BaseModel):
-    created_at: dt.datetime
-    updated_at: dt.datetime
+    created_at: Optional[dt.datetime]=None
+    updated_at: Optional[dt.datetime]=None
 
     @classmethod
     def from_model(cls, model: BaseModel) -> 'Metadata':

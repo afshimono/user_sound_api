@@ -83,7 +83,7 @@ class PostgresRepo(Repo):
                 .filter(AudioModel.step_count == step_count) \
                 .first()
     
-    def list_audio(self, session_id: Optional[int] = None) -> List[Audio]:
+    def list_audio(self, session_id: Optional[int] = None) -> List[AudioModel]:
         if session_id is None:
             with self.session() as db:
                 return db.query(AudioModel).all()

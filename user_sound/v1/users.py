@@ -6,11 +6,11 @@ from user_sound.core.schemas import UserBase, UserWithId
 from user_sound.core.service import Service
 from user_sound.core.postgres_repo import postgres_repo
 
-user_service = Service(repo=postgres_repo)
+service = Service(repo=postgres_repo)
 
 
 def get_user_service() -> Service:
-    return user_service
+    return service
 
 
 router = APIRouter(prefix="/v1/users",

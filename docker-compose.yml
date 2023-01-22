@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+
+  user_sound:
+    build: .
+    env_file:
+      - docker.env
+    ports:
+    - "8000:8000"
+    depends_on:
+      - postgrescompose
+    networks:
+      - postgres-network
+  postgrescompose:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: ${DATABASE_LOGIN}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - "15432:5432"
+    networks:
+      - postgres-network
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_MAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgrescompose
+    networks:
+      - postgres-network
+
+networks: 
+  postgres-network:
+    driver: bridge

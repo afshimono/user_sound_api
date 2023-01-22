@@ -60,7 +60,7 @@ class Service:
         audio_entity = self.repo.create_audio(audio=new_audio)
         return self._make_single_audio_response(audio_entity)
 
-    def list_audio(self, session_id:Optional[int]=None) -> MultipleAudioDTO:
+    def list_audio(self, session_id:Optional[int] = None) -> MultipleAudioDTO:
         audio_list = self.repo.list_audio(session_id)
         single_response_list = [self._make_single_audio_response(audio) for audio in audio_list]
         return MultipleAudioDTO(data=single_response_list)
