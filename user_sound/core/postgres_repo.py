@@ -1,7 +1,9 @@
 from typing import List, Optional
 import datetime as dt
+import os
 
 import urllib.parse
+import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import  sessionmaker
 from sqlalchemy.exc import  IntegrityError
@@ -16,8 +18,19 @@ from user_sound.core.repository import Repo
 class PostgresRepo(Repo):
 
     def __init__(self) -> None:
-        url_str = f"postgresql://{urllib.parse.quote_plus(env_vars.db_login)}:{urllib.parse.quote_plus(env_vars.db_password)}"\
-            + f"@{env_vars.db_url}/{env_vars.db_name}"
+        if os.environ.get("ENV") == "debug":
+            url_str = f"postgresql://{urllib.parse.quote_plus(env_vars.db_login)}:{urllib.parse.quote_plus(env_vars.db_password)}"\
+                    + f"@{env_vars.db_url}/{env_vars.db_name}"
+        elif os.environ.get("ENV") == "gcloud":
+            url_str = sqlalchemy.engine.url.URL.create(
+                drivername="postgresql+pg8000",
+                username=env_vars.db_login,
+                password=env_vars.db_password,
+                database=env_vars.db_name,
+                query={
+                    "unix_sock": f"{env_vars.instance_unix_socket}/.s.PGSQL.5432"
+                },
+            )
         engine = create_engine(url_str)
         self.session = sessionmaker(
             autocommit=False, autoflush=False, bind=engine)

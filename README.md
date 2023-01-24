@@ -4,9 +4,14 @@ Simple User-Sound API
 
 ## Basic Design
 
-This is a pretty straight forward DB model:
+This is a pretty straight forward DB model, with 2 tables:
+
+![DB Schema](resources/db.png)
 
 A postman collection can be found in the resources folder to make testing easier.
+
+This app was developed to run in GCP Cloud Run + Cloud SQL (Postgres).
+Make sure the Cloud SQL is configured properly.
 
 ## Running Locally
 
@@ -28,6 +33,7 @@ DATABASE_LOGIN=admin
 DATABASE_PASSWORD=password
 DATABASE_NAME=user_sound
 PGADMIN_MAIL=admin@test.com
+ENV=debug
 ```
 
 Start the `dev.docker-compose.yml` which will create the postgres and pgadmin containers:
@@ -53,11 +59,35 @@ python -m uvicorn user_sound.main:app
 
 The application should start on port 8000.
 
-## Deploying Docker Image
+## Running Unittests
 
-Make sure to have the service account JSON in the `secrets` folder.
+```
+export PYTHONPATH=$PYTHONPATH:{your_folder_location}
+python -m unittest discover tests.unit
+```
 
-You can run the script `deploy_gcp_cloud_run.sh` located in the scripts folder.
+## Running Integration Tests
+
+This requires all the ENV listed in the sample.env plus a `HOST_URL`, which has the base URL.
+For example, running on docker exposing the port 8000, the env would be:
+
+```
+export HOST_URL=http://localhost:8000
+```
+
+It is possible to test this by starting `docker-compose.yml` and running:
+
+```
+export PYTHONPATH=$PYTHONPATH:{your_folder_location}
+python tests/integration/run_tests.py
+```
+
+## Deploying Docker Image to GCP
+
+Make sure to have the service account JSON in the `secrets` folder, named as `service-account.json`.
+
+You can run the script `deploy_gcp_cloud_run.sh` located in the scripts folder. Remember to set the env variable `PROJECT_ID` to your google project.
+You also must have the
 
 ## Points to improve
 
@@ -69,11 +99,11 @@ You can run the script `deploy_gcp_cloud_run.sh` located in the scripts folder.
 
 ## TODO
 
-- [ ] Documentation
+- [x] Documentation
 - [x] User API
 - [x] Sound API
 - [x] Database
-- [ ] Unit tests - User
-- [ ] Unit tests - Sound
-- [ ] Deployment Script for GCP
-- [ ] Integration tests - Database
+- [x] Unit tests - User
+- [x] Unit tests - Sound
+- [x] Deployment Script for GCP
+- [x] Integration tests - Database

@@ -10,15 +10,17 @@ from user_sound.main import app
 from user_sound.v1.users import get_user_service
 from user_sound.v1.audio import get_audio_service
 from tests.unit.test_service import TestBaseService
+from tests.unit.test_data_mixin import TestDataMixin
 
 
-class TestBaseEndpoint(unittest.TestCase):
+class TestBaseEndpoint(unittest.TestCase, TestDataMixin):
     def setUp(self) -> None:
         self.repo = MockRepo()
         self.service = Service(repo=self.repo)
         self.client = TestClient(app)
         app.dependency_overrides[get_user_service] = self.override_get_service
         app.dependency_overrides[get_audio_service] = self.override_get_service
+        self.load_test_data()
 
     def override_get_service(self):
         return self.service
