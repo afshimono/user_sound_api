@@ -4,4 +4,4 @@ uvicorn==0.35.0
 email-validator==2.2.0
 psycopg2-binary==2.9.10
 requests==2.32.4
-pg8000==1.31.2
+pg8000==1.31.4
