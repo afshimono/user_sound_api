@@ -1,6 +1,6 @@
 SQLAlchemy==2.0.46
 fastapi==0.131.0
-uvicorn==0.40.0
+uvicorn==0.41.0
 email-validator==2.3.0
 psycopg2-binary==2.9.11
 requests==2.32.5
